@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/compute/compute.iml" filepath="$PROJECT_DIR$/compute/compute.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mapping/mapping.iml" filepath="$PROJECT_DIR$/mapping/mapping.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mydb/mydatabase.iml" filepath="$PROJECT_DIR$/mydb/mydatabase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myfile/myfile.iml" filepath="$PROJECT_DIR$/myfile/myfile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/obj_db_demo.iml" filepath="$PROJECT_DIR$/.idea/obj_db_demo.iml" />
+    </modules>
+  </component>
+</project>
