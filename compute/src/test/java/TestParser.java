@@ -1,11 +1,11 @@
 import compute.parser.Parser;
 import org.junit.Test;
 
-public class TestParser extends ParserTestBase{
+public class TestParser extends MyfileTestBase {
 
     @Test
     public void select(){
-        String command = "select a,b,c from test where c1=1 and c1 not between 2 and 23 or c2 = 'a' and c2 is null group by c1, c2 order by c1 asc, c2 desc";
+        String command = "select max(c1),c2 from test where c1=1 and c1 not between 2 and 23 or c2 = 'a' and c2 is null group by c1, c2 order by c1 asc, c2 desc";
         parseCommand(command);
     }
     @Test

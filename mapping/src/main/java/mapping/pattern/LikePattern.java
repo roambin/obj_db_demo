@@ -1,5 +1,7 @@
 package mapping.pattern;
 
+import java.util.regex.Matcher;
+
 public class LikePattern extends Pattern{
     String value;
     public boolean isNot;
@@ -12,5 +14,16 @@ public class LikePattern extends Pattern{
     @Override
     public String toString() {
         return colName + " like '" + value + "'";
+    }
+
+    @Override
+    public boolean isMeet(Object value) {
+        String strPattern = value.toString();
+        strPattern = strPattern.replace("_", "([\\\\s\\\\S])");
+        strPattern = strPattern.replace("%", "([\\\\s\\\\S]*)");
+        java.util.regex.Pattern regexPattern = java.util.regex.Pattern.compile(strPattern);
+        Matcher matcher = regexPattern.matcher(this.value);
+        if(matcher.find())  return matcher.group(0).length() == this.value.length();
+        else    return false;
     }
 }

@@ -1,8 +1,9 @@
-package utils;
+package myfile.utils;
 
-import info.FileInfo;
+import myfile.info.FileInfo;
 import javassist.*;
 import javassist.bytecode.AccessFlag;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -63,11 +64,4 @@ public class JavassistUtils {
         field.setAccessible(true);
         field.set(obj, fieldValue);
     }
-/*    public static void main(String[] args){
-        HashMap<String,Object> a = new HashMap<String, Object>();
-        a.put("a","a");
-        a.put("b",(int)1);
-        a.put("c", new String[]{"A","b"});
-        Object b = JavassistUtils.generateObject("c1", a);
-    }*/
 }

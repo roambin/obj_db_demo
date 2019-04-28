@@ -24,4 +24,9 @@ public class InPattern extends Pattern{
         buffer.delete(buffer.length() - 2, buffer.length());
         return colName + " in (" + new String(buffer) + ")";
     }
+
+    @Override
+    public boolean isMeet(Object value) {
+        return isNot != values.contains(value);
+    }
 }

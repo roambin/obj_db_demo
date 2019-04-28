@@ -1,6 +1,6 @@
 package myfile;
 
-import operator.FileOperator;
+import myfile.operator.FileOperator;
 import org.junit.Test;
 
 public class TestMyFile {

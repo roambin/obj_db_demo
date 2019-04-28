@@ -1,4 +1,4 @@
-package utils;
+package myfile.utils;
 
 import mapping.entity.Content;
 import mapping.entity.Location;
@@ -14,7 +14,7 @@ public class TransformUtils {
         for(Field field: obj.getClass().getDeclaredFields()){
             field.setAccessible(true);
             try {
-                content.keyValue.put(field.getName(), field.get(obj));
+                content.valueMap.put(field.getName(), field.get(obj));
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -23,8 +23,8 @@ public class TransformUtils {
     }
     public static Object toObject(Location location, Content content){
         Object obj = null;
-        if(content.keyValue != null){
-            obj = JavassistUtils.generateObject(location.tableName, content.keyValue);
+        if(content.valueMap != null){
+            obj = JavassistUtils.generateObject(location.tableName, content.valueMap);
         }
         return obj;
     }

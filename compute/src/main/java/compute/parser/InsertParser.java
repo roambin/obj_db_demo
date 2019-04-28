@@ -8,10 +8,11 @@ import mapping.utils.SerdeUtils;
 import java.util.ArrayList;
 
 public class InsertParser {
-    protected static void parseInsert(String command, LogicalPlan logicalPlan){
+    protected static void parse(String command, LogicalPlan logicalPlan){
         command = Parser.cutWord(command);
         String tableName = Parser.readNextWord(command);
         logicalPlan.insertContainer.tableName = tableName;
+        logicalPlan.tableName = tableName;
         command = Parser.cutWord(command);
         String[] colNames = null;
         TableInfo tableInfo = new TableInfo(Setting.DATABASE, tableName);

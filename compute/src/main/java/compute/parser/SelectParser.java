@@ -1,27 +1,35 @@
 package compute.parser;
 
-import compute.Setting;
 import compute.entity.LogicalPlan;
-import compute.entity.TableInfo;
 import compute.entity.container.GroupByContainer;
 import compute.entity.container.OrderByContainer;
-import compute.entity.container.WhereContainer;
-import mapping.pattern.BetweenPattern;
-import mapping.pattern.ComparePattern;
-import mapping.pattern.IsNullPattern;
-import mapping.pattern.Pattern;
-import mapping.utils.SerdeUtils;
+import compute.entity.container.StatisticContainer;
 
 import java.util.ArrayList;
 
 public class SelectParser {
-    protected static void parseSelect(String command, LogicalPlan logicalPlan){
-        String[] colNames = Parser.strToArray(command.substring(0, command.indexOf("from")));
-        logicalPlan.selectContainer.colNames = colNames;
+    protected static void parse(String command, LogicalPlan logicalPlan){
+        String[] colNamesSelect = Parser.strToArray(command.substring(0, command.indexOf("from")));
         command = command.substring(command.indexOf("from") + 4).trim();
-        String tableName = command.substring(0, command.indexOf(' '));
+        String tableName = Parser.readNextWord(command);
         logicalPlan.selectContainer.tableName = tableName;
+        logicalPlan.tableName = tableName;
         command = command.substring(tableName.length()).trim();
+        logicalPlan.selectContainer.colNames = colNamesSelect;
+        //compute
+        for(int i = 0; i < colNamesSelect.length; i++){
+            String statisticType = Parser.readNextWord(colNamesSelect[i]);
+            if(!statisticType.equals(colNamesSelect[i])){
+                String colName = Parser.cutWord(colNamesSelect[i]).trim();
+                colName = colName.substring(1, colName.length() - 1).trim();
+                //colNamesSelect[i] = colName;
+                logicalPlan.selectContainer.colNameParsedSet.add(colName);
+                logicalPlan.selectContainer.statisticContainers.put(colNamesSelect[i], new StatisticContainer(colName, statisticType.toLowerCase(), i));
+            }else{
+                logicalPlan.selectContainer.colNameParsedSet.add(colNamesSelect[i]);
+            }
+        }
+        //where, group by, order by
         if(command.length() == 0)   return;
         ArrayList<String> strList = new ArrayList<>();
         command = Parser.formatString(command, strList);
@@ -50,13 +58,14 @@ public class SelectParser {
         if(indexOrder != -1){
             String orderCommand = command.trim().substring("order by".length());
             String[] words = Parser.strToArray(orderCommand);
-            colNames = new String[words.length];
-            boolean[] isAscArry = new boolean[words.length];
+            String colNamesOrder[] = new String[words.length];
+            Boolean[] isAscArry = new Boolean[words.length];
             for(int i = 0; i < words.length; i++){
-                colNames[i] = words[i].substring(0, words[i].indexOf(' '));
-                isAscArry[i] = words[i].substring(words[i].lastIndexOf(' ') + 1).toLowerCase().equals("asc");
+                colNamesOrder[i] = Parser.readNextWord(words[i]);
+                String sortType = Parser.cutWord(words[i]);
+                isAscArry[i] = !sortType.toLowerCase().equals("desc");
             }
-            logicalPlan.selectContainer.orderByContainer = new OrderByContainer(colNames, isAscArry);
+            logicalPlan.selectContainer.orderByContainer = new OrderByContainer(colNamesOrder, isAscArry);
         }
     }
 }

@@ -1,4 +1,4 @@
-package utils;
+package mydb.utils;
 
 public class SerdeUtils {
     public static String objToStringValue(Object obj){

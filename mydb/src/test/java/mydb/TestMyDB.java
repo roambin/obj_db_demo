@@ -2,10 +2,12 @@ package mydb;
 
 import mapping.entity.Content;
 import mapping.entity.Location;
-import operator.DBIO;
-import operator.DBOpObject;
+import mydb.operator.DBIO;
+import mydb.operator.DBOpObject;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class TestMyDB extends DBTestBase{
@@ -43,8 +45,8 @@ public class TestMyDB extends DBTestBase{
     @Test
     public void update(){
         dbOpObject.insert(location, content);
-        content.keyValue.put("a", 2);
-        content.keyValue.put("b", "b");
+        content.valueMap.put("a", 2);
+        content.valueMap.put("b", "b");
         dbOpObject.update(location, content);
         HashMap<String, Object> selMap = dbOpObject.select(location, io).next();
         HashMap<String, Object> correctMap = new HashMap<>();
@@ -58,6 +60,11 @@ public class TestMyDB extends DBTestBase{
         dbOpObject.delete(location);
         boolean hasNext = dbOpObject.select(location, io).hasNext();
         assert !hasNext;
+    }
+    @Test
+    public void show(){
+        String[] tableNames = dbOpObject.show().toArray(new String[0]);
+        assert Arrays.equals(tableNames, new String[]{"test"});
     }
     private static boolean compareMap(HashMap<String, Object> map1, HashMap<String, Object> map2){
         if(map1.size() != map2.size())  return false;

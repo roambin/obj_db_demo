@@ -1,4 +1,4 @@
-package info;
+package mydb.info;
 
 public class DBInfo {
     public static String driver = "com.mysql.cj.jdbc.Driver" ;

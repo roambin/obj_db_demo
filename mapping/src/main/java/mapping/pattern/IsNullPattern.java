@@ -11,4 +11,9 @@ public class IsNullPattern extends Pattern{
     public String toString() {
         return colName + (isNot ? " is null" : " is not null");
     }
+
+    @Override
+    public boolean isMeet(Object value) {
+        return isNot != (value == null);
+    }
 }

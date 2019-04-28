@@ -1,12 +1,13 @@
-package utils;
+package mydb.utils;
 
-import info.DBInfo;
+import mydb.info.DBInfo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 
 public class ConnectUtils {
 
@@ -84,10 +85,10 @@ public class ConnectUtils {
         PreparedStatement pstm = null;
         try{
             pstm = conn.prepareStatement(command);
-            boolean result = pstm.execute();
+            pstm.execute();
             pstm.close();
             conn.close();
-            return result;
+            return true;
         }catch (SQLException e){
             e.printStackTrace();
             return false;

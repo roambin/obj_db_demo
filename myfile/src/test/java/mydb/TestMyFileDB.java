@@ -1,9 +1,10 @@
 package mydb;
 
 import mapping.entity.Content;
+import mapping.entity.VirtualColumn;
 import mapping.operator.IO;
 import mapping.entity.Location;
-import operator.FileOpObject;
+import myfile.operator.FileOpObject;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class TestMyFileDB extends MyFileDBTestBase {
     public void select(){
         dbOpObject.insert(location, content);
         HashMap<String, Object> selMap = dbOpObject.select(location, io).next();
+        selMap.remove(VirtualColumn.colIndex);
         HashMap<String, Object> correctMap = new HashMap<>();
         correctMap.put("a", 1);
         correctMap.put("b", "a");
@@ -35,6 +37,7 @@ public class TestMyFileDB extends MyFileDBTestBase {
     public void insert(){
         dbOpObject.insert(location, content);
         HashMap<String, Object> selMap = dbOpObject.select(location, io).next();
+        selMap.remove(VirtualColumn.colIndex);
         HashMap<String, Object> correctMap = new HashMap<>();
         correctMap.put("a", 1);
         correctMap.put("b", "a");
@@ -44,10 +47,11 @@ public class TestMyFileDB extends MyFileDBTestBase {
     @Test
     public void update(){
         dbOpObject.insert(location, content);
-        content.keyValue.put("a", 2);
-        content.keyValue.put("b", "b");
+        content.valueMap.put("a", 2);
+        content.valueMap.put("b", "b");
         dbOpObject.update(location, content);
         HashMap<String, Object> selMap = dbOpObject.select(location, io).next();
+        selMap.remove(VirtualColumn.colIndex);
         HashMap<String, Object> correctMap = new HashMap<>();
         correctMap.put("a", 2);
         correctMap.put("b", "b");

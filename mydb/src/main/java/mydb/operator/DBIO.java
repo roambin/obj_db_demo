@@ -1,7 +1,7 @@
-package operator;
+package mydb.operator;
 
 import mapping.operator.IO;
-import utils.ConnectUtils;
+import mydb.utils.ConnectUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

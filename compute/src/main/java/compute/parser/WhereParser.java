@@ -8,7 +8,6 @@ import mapping.pattern.ComparePattern;
 import mapping.pattern.IsNullPattern;
 import mapping.pattern.Pattern;
 import mapping.utils.SerdeUtils;
-
 import java.util.ArrayList;
 
 public class WhereParser {
@@ -36,6 +35,7 @@ public class WhereParser {
         }
         return whereContainer;
     }
+
     public static Pattern getPattern(String command, String tableName, ArrayList<String> strList){
         boolean isReplaced = false;
         for(String sign: new String[]{"!=", ">", "<", ">=", "<="}){

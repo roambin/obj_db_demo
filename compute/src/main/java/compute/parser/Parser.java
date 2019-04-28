@@ -16,36 +16,35 @@ public class Parser {
         command = command.substring(firstIndex).trim();
         switch (firstWord.toLowerCase()){
             case "select":
-                SelectParser.parseSelect(command, logicalPlan);
+                SelectParser.parse(command, logicalPlan);
                 logicalPlan.type = "select";
                 break;
             case "insert":
-                InsertParser.parseInsert(command, logicalPlan);
+                InsertParser.parse(command, logicalPlan);
                 logicalPlan.type = "insert";
                 break;
             case "update":
-                UpdateParser.parseUpdate(command, logicalPlan);
+                UpdateParser.parse(command, logicalPlan);
                 logicalPlan.type = "update";
                 break;
             case "delete":
-                DeleteParser.parseDelete(command, logicalPlan);
+                DeleteParser.parse(command, logicalPlan);
                 logicalPlan.type = "delete";
                 break;
             case "create":
-                CreateParser.parseCreate(command, logicalPlan);
+                CreateParser.parse(command, logicalPlan);
                 logicalPlan.type = "create";
                 break;
             case "drop":
-                DropParser.parseDrop(command, logicalPlan);
+                DropParser.parse(command, logicalPlan);
                 logicalPlan.type = "drop";
                 break;
             case "truncate":
-                DropParser.parseDrop(command, logicalPlan);
-                logicalPlan.type = "drop";
-                logicalPlan.dropContainer.isTruncate = true;
+                TruncateParser.parse(command, logicalPlan);
+                logicalPlan.type = "truncate";
                 break;
             case "show":
-                ShowParser.parseShow(command, logicalPlan);
+                ShowParser.parse(command, logicalPlan);
                 logicalPlan.type = "show";
                 break;
         }
@@ -108,6 +107,10 @@ public class Parser {
     private static int getWordSplitIndex(String command){
         int indexBlanek =  command.indexOf(' ');
         int indexBracket = command.indexOf('(');
+        if(indexBracket == 0){
+            int bracketRightIndex = command.indexOf(')');
+            if(bracketRightIndex != -1) indexBracket = bracketRightIndex + 1;
+        }
         int indexSplit = Math.min(indexBlanek, indexBracket);
         if(indexSplit == -1)    indexSplit = Math.max(indexBlanek, indexBracket);
         return indexSplit;

@@ -8,9 +8,10 @@ import mapping.utils.SerdeUtils;
 import java.util.ArrayList;
 
 public class UpdateParser {
-    protected static void parseUpdate(String command, LogicalPlan logicalPlan){
+    protected static void parse(String command, LogicalPlan logicalPlan){
         String tableName = Parser.readNextWord(command);
         logicalPlan.updateContainer.tableName = tableName;
+        logicalPlan.tableName = tableName;
         command = Parser.cutWord(command);
         if(!Parser.readNextWord(command).toLowerCase().equals("set")){
             Parser.throwException(Parser.exceptionMessage);
