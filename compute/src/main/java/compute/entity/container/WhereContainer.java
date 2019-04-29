@@ -5,8 +5,8 @@ import mapping.pattern.Pattern;
 import java.util.*;
 
 public class WhereContainer {
-    WhereContainer parent;
-    ArrayList<WhereContainer> children;
+    public WhereContainer parent;
+    public ArrayList<WhereContainer> children;
     public Pattern pattern;
     public ArrayList<ArrayList<Pattern>> condition = null;
     public HashSet<String> colNameSet = new HashSet<>();
@@ -23,6 +23,26 @@ public class WhereContainer {
         children.add(whereContainer);
         return whereContainer;
     }
+    /*for where pharser
+    public WhereContainer addChildPattern(Pattern pattern){
+        WhereContainer addContainer = new WhereContainer(pattern, this);
+        return addAnd(addContainer);
+    }
+    public WhereContainer addAnd(WhereContainer addContainer){
+        return addAnd(this, addContainer);
+    }
+    public static WhereContainer addAnd(WhereContainer whereContainer, WhereContainer addContainer){
+        for(WhereContainer child: whereContainer.children){
+            if(child.children.size() == 0)   child.children.add(addContainer);
+            else child.children.add(addAnd(child, addContainer));
+        }
+        return whereContainer;
+    }
+    public WhereContainer addOr(WhereContainer addContainer){
+        parent.children.add(addContainer);
+        addContainer.parent = parent;
+        return this;
+    }*/
     public ArrayList<ArrayList<Pattern>> generateCondition(boolean isFreshen){
         if(condition != null && !isFreshen) return condition;
         colNameSet.clear();

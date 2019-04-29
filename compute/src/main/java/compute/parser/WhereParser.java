@@ -35,6 +35,27 @@ public class WhereParser {
         }
         return whereContainer;
     }
+    /*for where pharser
+    public static WhereContainer whereCommandToContainer(String command, String tableName, ArrayList<String> strList){
+        WhereContainer whereContainer = new WhereContainer();
+        String[] orCommands = command.split("or", -1);
+        for(String orCommand: orCommands){
+            WhereContainer rootContainer = new WhereContainer();
+            String[] andCommands = orCommand.split("and", -1);
+            for(String unitCommand: andCommands){
+                unitCommand = unitCommand.trim();
+                if(unitCommand.startsWith("(")){
+                    rootContainer.addAnd(whereCommandToContainer(unitCommand.substring(1, unitCommand.length() - 1), tableName, strList));
+                }else {
+                    rootContainer.addChildPattern(getPattern(unitCommand.trim(), tableName, strList));
+                }
+            }
+            rootContainer = rootContainer.children.get(0);
+            whereContainer.addAnd(rootContainer);
+        }
+
+        return whereContainer;
+    }*/
 
     public static Pattern getPattern(String command, String tableName, ArrayList<String> strList){
         boolean isReplaced = false;
