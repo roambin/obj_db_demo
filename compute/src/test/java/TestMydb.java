@@ -21,17 +21,19 @@ public class TestMydb extends MydbTestBase {
         server.runCommand("insert into test2 values(3, 'a')");
         server.runCommand("insert into test2 values(3, 'b')");
         runCommand("select * from test2 order by c1 desc, c2");
+        server.runCommand("drop table test2");
     }
     @Test
     public void groupby(){
         server.runCommand("drop table test2");
-        server.runCommand("create table test2(c1 int, c2 char(20)) store myfile");
+        server.runCommand("create table test2(c1 int, c2 char(20)) store mydb");
         server.runCommand("insert into test2 values(1, 'a')");
         server.runCommand("insert into test2 values(2, 'b')");
         server.runCommand("insert into test2 values(3, 'c')");
         server.runCommand("insert into test2 values(3, 'a')");
         server.runCommand("insert into test2 values(3, 'b')");
         runCommand("select c1, max(c2) from test2 group by c1");
+        server.runCommand("drop table test2");
     }
     @Test
     public void statistic(){

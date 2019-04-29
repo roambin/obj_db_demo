@@ -20,6 +20,7 @@ public class TestMyfile extends MyfileTestBase {
         server.runCommand("insert into test2 values(3, 'a')");
         server.runCommand("insert into test2 values(3, 'b')");
         runCommand("select * from test2 order by c1 desc, c2");
+        server.runCommand("drop table test2");
     }
     @Test
     public void groupby(){
@@ -31,6 +32,7 @@ public class TestMyfile extends MyfileTestBase {
         server.runCommand("insert into test2 values(3, 'a')");
         server.runCommand("insert into test2 values(3, 'b')");
         runCommand("select c1, max(c2) from test2 group by c1");
+        server.runCommand("drop table test2");
     }
     @Test
     public void statistic(){
