@@ -9,7 +9,7 @@ public class IsNullPattern extends Pattern{
 
     @Override
     public String toString() {
-        return colName + (isNot ? " is null" : " is not null");
+        return colName + (isNot ? " is not null" : " is null");
     }
 
     @Override
