@@ -14,7 +14,8 @@ public class BetweenPattern extends Pattern{
 
     @Override
     public String toString() {
-        return colName + " between " + valueMin + " and " + valueMax;
+        String betweenStr = isNot ? " not between " : " between ";
+        return colName + betweenStr + valueMin + " and " + valueMax;
     }
 
     @Override

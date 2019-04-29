@@ -13,7 +13,8 @@ public class LikePattern extends Pattern{
 
     @Override
     public String toString() {
-        return colName + " like '" + value + "'";
+        String likeStr = isNot ? " not like " : " like ";
+        return colName + likeStr + "'" + value + "'";
     }
 
     @Override

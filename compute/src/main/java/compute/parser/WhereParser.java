@@ -15,22 +15,14 @@ public class WhereParser {
         WhereContainer whereContainer = new WhereContainer();
         String[] orCommands = command.split("or", -1);
         for(String orCommand: orCommands){
+            WhereContainer andContainer = whereContainer;
             String[] andCommandsRow = orCommand.split("and", -1);
-            ArrayList<String> andCommandsList = new ArrayList<>();
             for(int i = 0; i < andCommandsRow.length; i++){
                 String condition = andCommandsRow[i];
                 if(condition.contains("between")){
                     condition += "and" + andCommandsRow[++i];
                 }
-                andCommandsList.add(condition.trim());
-            }
-            String[] andCommands = new String[andCommandsList.size()];
-            for(int i = 0; i < andCommands.length; i++){
-                andCommands[i] = andCommandsList.get(i);
-            }
-            WhereContainer andContainer = whereContainer;
-            for(String andCommand: andCommands){
-                andContainer = andContainer.addAndPattern(getPattern(andCommand, tableName, strList));
+                andContainer = andContainer.addAndPattern(getPattern(condition.trim(), tableName, strList));
             }
         }
         return whereContainer;

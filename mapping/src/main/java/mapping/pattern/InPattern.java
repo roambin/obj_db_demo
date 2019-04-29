@@ -22,7 +22,8 @@ public class InPattern extends Pattern{
             buffer.append(SerdeUtils.objToStr(value)).append(", ");
         }
         buffer.delete(buffer.length() - 2, buffer.length());
-        return colName + " in (" + new String(buffer) + ")";
+        String inStr = isNot ? " not in " : " in ";
+        return colName + inStr + "(" + new String(buffer) + ")";
     }
 
     @Override
