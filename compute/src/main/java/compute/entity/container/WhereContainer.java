@@ -4,7 +4,7 @@ import mapping.pattern.Pattern;
 
 import java.util.*;
 
-public class WhereContainer {
+public class WhereContainer extends Container {
     public WhereContainer parent;
     public ArrayList<WhereContainer> children;
     public Pattern pattern;
@@ -13,36 +13,51 @@ public class WhereContainer {
     public WhereContainer(){
         children = new ArrayList<>();
     }
-    public WhereContainer(Pattern pattern, WhereContainer whereContainer) {
-        parent = whereContainer;
-        children = new ArrayList<>();
+    public WhereContainer(Pattern pattern) {
         this.pattern = pattern;
+        children = new ArrayList<>();
     }
-    public WhereContainer addAndPattern(Pattern pattern){
-        WhereContainer whereContainer = new WhereContainer(pattern, this);
-        children.add(whereContainer);
-        return whereContainer;
-    }
-    /*for where pharser
-    public WhereContainer addChildPattern(Pattern pattern){
-        WhereContainer addContainer = new WhereContainer(pattern, this);
-        return addAnd(addContainer);
+//    public WhereContainer(Pattern pattern, WhereContainer whereContainer) {
+//        parent = whereContainer;
+//        whereContainer.children.add(this);
+//        children = new ArrayList<>();
+//        this.pattern = pattern;
+//    }
+
+//    public WhereContainer addAndPattern(Pattern pattern){
+//        WhereContainer whereContainer = new WhereContainer(pattern, this);
+//        children.add(whereContainer);
+//        return whereContainer;
+//    }
+    public static WhereContainer copy(WhereContainer whereContainer){
+        WhereContainer copyContainer = new WhereContainer();
+        copyContainer.children = (ArrayList<WhereContainer>)whereContainer.children.clone();
+        for(WhereContainer child: copyContainer.children){
+            child.parent = copyContainer;
+        }
+        copyContainer.pattern = whereContainer.pattern;
+        return copyContainer;
     }
     public WhereContainer addAnd(WhereContainer addContainer){
         return addAnd(this, addContainer);
     }
     public static WhereContainer addAnd(WhereContainer whereContainer, WhereContainer addContainer){
-        for(WhereContainer child: whereContainer.children){
-            if(child.children.size() == 0)   child.children.add(addContainer);
-            else child.children.add(addAnd(child, addContainer));
+        if(whereContainer.children.size() == 0){
+            WhereContainer copyContainer = copy(addContainer);
+            whereContainer.children.add(copyContainer);
+            copyContainer.parent = whereContainer;
+        }else{
+            for(WhereContainer child: whereContainer.children){
+                child.addAnd(child, addContainer);
+            }
         }
         return whereContainer;
     }
-    public WhereContainer addOr(WhereContainer addContainer){
-        parent.children.add(addContainer);
-        addContainer.parent = parent;
-        return this;
-    }*/
+    public void addOr(WhereContainer addContainer){
+        this.children.add(addContainer);
+        addContainer.parent = this;
+    }
+
     public ArrayList<ArrayList<Pattern>> generateCondition(boolean isFreshen){
         if(condition != null && !isFreshen) return condition;
         colNameSet.clear();
@@ -50,15 +65,16 @@ public class WhereContainer {
         ArrayList<WhereContainer> leaves = new ArrayList<>();
         preScan(this, leaves);
         for(WhereContainer node: leaves){
-            ArrayList<Pattern> patterns = new ArrayList<>();
+            HashMap<String, Pattern> patterns = new HashMap<>();
             while(node.parent != null){
-                patterns.add(node.pattern);
-                colNameSet.add(node.pattern.colName);
+                if(node.pattern != null){
+                    patterns.put(node.pattern.toString(), node.pattern);
+                    colNameSet.add(node.pattern.colName);
+                }
                 node = node.parent;
-
             }
             if(patterns.size() > 0){
-                condition.add(patterns);
+                condition.add(new ArrayList<>(patterns.values()));
             }
         }
         return condition;

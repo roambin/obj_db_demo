@@ -1,6 +1,6 @@
 package compute.entity.container;
 
-public class OrderByContainer {
+public class OrderByContainer extends Container {
     public String[] colNames;
     public Boolean[] isAsc;
     public OrderByContainer(String[] colNames, Boolean[] isAsc){

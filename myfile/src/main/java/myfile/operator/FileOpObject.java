@@ -5,8 +5,9 @@ import mapping.entity.Content;
 import mapping.entity.VirtualColumn;
 import mapping.operator.IO;
 import mapping.entity.Location;
-import myfile.utils.JavassistUtils;
-import myfile.utils.TransformUtils;
+import mapping.utils.JavassistUtils;
+import mapping.utils.TransformUtils;
+import myfile.info.FileInfo;
 
 import java.util.*;
 
@@ -48,7 +49,11 @@ public class FileOpObject extends OpObject {
 
     @Override
     public boolean update(Location location, Content content) {
-        return FileOperator.update(location.key, TransformUtils.toObject(location, content));
+        Content contentUpdate = TransformUtils.getContent(FileOperator.read(location.tableName, location.key));
+        for(Map.Entry<String, Object> entry: content.valueMap.entrySet()){
+            contentUpdate.valueMap.put(entry.getKey(), entry.getValue());
+        }
+        return FileOperator.update(location.key, TransformUtils.toObject(location, contentUpdate));
     }
 
     @Override

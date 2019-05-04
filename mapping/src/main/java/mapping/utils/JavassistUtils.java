@@ -1,8 +1,8 @@
-package myfile.utils;
+package mapping.utils;
 
-import myfile.info.FileInfo;
 import javassist.*;
 import javassist.bytecode.AccessFlag;
+import mapping.info.FileInfo;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

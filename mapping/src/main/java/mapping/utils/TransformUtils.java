@@ -1,7 +1,8 @@
-package myfile.utils;
+package mapping.utils;
 
 import mapping.entity.Content;
 import mapping.entity.Location;
+
 import java.lang.reflect.Field;
 
 public class TransformUtils {

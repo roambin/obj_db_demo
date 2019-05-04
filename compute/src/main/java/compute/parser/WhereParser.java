@@ -11,56 +11,105 @@ import mapping.utils.SerdeUtils;
 import java.util.ArrayList;
 
 public class WhereParser {
+//    public static WhereContainer whereCommandToContainer(String command, String tableName, ArrayList<String> strList){
+//        WhereContainer whereContainer = new WhereContainer();
+//        String[] orCommands = command.split("or", -1);
+//        for(String orCommand: orCommands){
+//            WhereContainer andContainer = whereContainer;
+//            String[] andCommandsRow = orCommand.split("and", -1);
+//            for(int i = 0; i < andCommandsRow.length; i++){
+//                String condition = andCommandsRow[i];
+//                if(condition.contains("between")){
+//                    condition += "and" + andCommandsRow[++i];
+//                }
+//                andContainer = andContainer.addAndPattern(getPattern(condition.trim(), tableName, strList));
+//            }
+//        }
+//        return whereContainer;
+//    }
     public static WhereContainer whereCommandToContainer(String command, String tableName, ArrayList<String> strList){
+        command = command.trim();
+        for(String sign: new String[]{"=", ">", "<", ">=", "<="}){
+            if(command.contains(sign)){
+                command = command.replace(sign, " " + sign + " ");
+                break;
+            }
+        }
+        command = command.replace("! =", " !=");
+        WhereContainer whereContainer = innerWhereCommandParser(command, tableName, strList);
+        return whereContainer;
+    }
+    private static WhereContainer innerWhereCommandParser(String command, String tableName, ArrayList<String> strList){
         WhereContainer whereContainer = new WhereContainer();
-        String[] orCommands = command.split("or", -1);
-        for(String orCommand: orCommands){
-            WhereContainer andContainer = whereContainer;
-            String[] andCommandsRow = orCommand.split("and", -1);
-            for(int i = 0; i < andCommandsRow.length; i++){
-                String condition = andCommandsRow[i];
-                if(condition.contains("between")){
-                    condition += "and" + andCommandsRow[++i];
+        WhereContainer seekContainer = null;
+        WhereContainer addContainer = null;
+        boolean isNextAnd = false;
+        while (!command.equals("")){
+            boolean isAnd = isNextAnd;
+            if(command.startsWith("(")){
+                int bracketNum = 1;
+                int index = 0;
+                outLoop: while (++index < command.length()){
+                    switch (command.charAt(index)){
+                        case '(':
+                            bracketNum++;
+                            break;
+                        case ')':
+                            bracketNum--;
+                            if(bracketNum == 0){
+                                break outLoop;
+                            }
+                            break;
+                    }
                 }
-                andContainer = andContainer.addAndPattern(getPattern(condition.trim(), tableName, strList));
+                String innerCommand = command.substring(1, index).trim();
+                command = command.substring(index + 1).trim();
+                if(command.length() != 0){
+                    String andOr = Parser.readNextWord(command).toLowerCase();
+                    command = Parser.cutWord(command).trim();
+                    isNextAnd = command.equals("and");
+                }
+                addContainer = innerWhereCommandParser(innerCommand, tableName, strList);
+            }else {
+                String commandType = Parser.cutWord(command);
+                String patternType = Parser.readNextWord(commandType);
+                if(patternType.toLowerCase().equals("not")) patternType = Parser.readNextWord(Parser.cutWord(commandType));
+                String patternStr = null;
+                int andIndex = command.indexOf("and");
+                int orIndex = command.indexOf("or");
+                if(andIndex == -1 && orIndex == -1){
+                    patternStr = command.trim();
+                    command = "";
+                }else if(andIndex != -1 && andIndex < orIndex || orIndex == -1){
+                    isNextAnd = true;
+                    patternStr = command.substring(0, andIndex).trim();
+                    command = Parser.cutWord(command.substring(andIndex)).trim();
+                }else if(orIndex != -1 && orIndex < andIndex || andIndex == -1){
+                    isNextAnd = false;
+                    patternStr = command.substring(0, orIndex).trim();
+                    command = Parser.cutWord(command.substring(orIndex)).trim();
+                }
+                if(patternType.toLowerCase().equals("between")){
+                    patternStr += " and " + Parser.readNextWord(command);
+                    command = Parser.cutWord(command).trim();
+                    isNextAnd = Parser.readNextWord(command).toLowerCase().equals("and");
+                    command = Parser.cutWord(command).trim();
+                }
+                Pattern pattern = getPattern(patternStr, tableName, strList);
+                addContainer = new WhereContainer(pattern);
+            }
+            if(isAnd){
+                seekContainer.addAnd(addContainer);
+                seekContainer = addContainer;
+            }else {
+                whereContainer.addOr(addContainer);
+                seekContainer = addContainer;
             }
         }
         return whereContainer;
     }
-    /*for where pharser
-    public static WhereContainer whereCommandToContainer(String command, String tableName, ArrayList<String> strList){
-        WhereContainer whereContainer = new WhereContainer();
-        String[] orCommands = command.split("or", -1);
-        for(String orCommand: orCommands){
-            WhereContainer rootContainer = new WhereContainer();
-            String[] andCommands = orCommand.split("and", -1);
-            for(String unitCommand: andCommands){
-                unitCommand = unitCommand.trim();
-                if(unitCommand.startsWith("(")){
-                    rootContainer.addAnd(whereCommandToContainer(unitCommand.substring(1, unitCommand.length() - 1), tableName, strList));
-                }else {
-                    rootContainer.addChildPattern(getPattern(unitCommand.trim(), tableName, strList));
-                }
-            }
-            rootContainer = rootContainer.children.get(0);
-            whereContainer.addAnd(rootContainer);
-        }
-
-        return whereContainer;
-    }*/
 
     public static Pattern getPattern(String command, String tableName, ArrayList<String> strList){
-        boolean isReplaced = false;
-        for(String sign: new String[]{"!=", ">", "<", ">=", "<="}){
-            if(command.contains(sign)){
-                command = command.replace(sign, " " + sign + " ");
-                isReplaced = true;
-                break;
-            }
-        }
-        if(!isReplaced){
-            command = command.replace("=", " = ");
-        }
         String colName = Parser.readNextWord(command);
         command = Parser.cutWord(command);
         String patternType = Parser.readNextWord(command);

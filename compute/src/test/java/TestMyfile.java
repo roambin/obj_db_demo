@@ -11,6 +11,11 @@ public class TestMyfile extends MyfileTestBase {
         runCommand("select c1,c2 from test where c1=1 and c1 not between 2 and 23 or c2 = 'a' and c2 is null group by c1, c2 order by c1 asc, c2 desc");
     }
     @Test
+    public void where(){
+        String command = "select c1,c2 from test where c1=1 and (c1 not between 2 and 23 or c2 = 'a' and c2 is null or (c1 = 1 or c1 != 2))";
+        runCommand(command);
+    }
+    @Test
     public void orderby(){
         server.runCommand("drop table test2");
         server.runCommand("create table test2(c1 int, c2 char(20)) store myfile");

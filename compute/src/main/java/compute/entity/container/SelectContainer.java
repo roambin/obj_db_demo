@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-public class SelectContainer {
+public class SelectContainer extends Container {
     public String tableName;
     public String[] colNames;
     public HashSet<String> colNameParsedSet;

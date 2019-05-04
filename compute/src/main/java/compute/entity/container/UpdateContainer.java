@@ -2,7 +2,7 @@ package compute.entity.container;
 
 import java.util.LinkedHashMap;
 
-public class UpdateContainer {
+public class UpdateContainer extends Container {
     public String tableName;
     public LinkedHashMap<String, Object> valueMap;
     public WhereContainer whereContainer;

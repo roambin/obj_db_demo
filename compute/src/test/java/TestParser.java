@@ -9,6 +9,11 @@ public class TestParser extends MyfileTestBase {
         parseCommand(command);
     }
     @Test
+    public void where(){
+        String command = "select c1,c2 from test where c1=1 and (c1 not between 2 and 23 or c2 = 'a' and c2 is null or (c1 = 1 or c1 != 2))";
+        parseCommand(command);
+    }
+    @Test
     public void insert(){
         String command = "insert into test(c1, c2) values(1, 'a')";
         parseCommand(command);

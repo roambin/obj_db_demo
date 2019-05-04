@@ -48,13 +48,12 @@ public class TestMyFileDB extends MyFileDBTestBase {
     public void update(){
         dbOpObject.insert(location, content);
         content.valueMap.put("a", 2);
-        content.valueMap.put("b", "b");
         dbOpObject.update(location, content);
         HashMap<String, Object> selMap = dbOpObject.select(location, io).next();
         selMap.remove(VirtualColumn.colIndex);
         HashMap<String, Object> correctMap = new HashMap<>();
         correctMap.put("a", 2);
-        correctMap.put("b", "b");
+        correctMap.put("b", "a");
         assert compareMap(selMap, correctMap);
         dbOpObject.delete(location);
     }

@@ -2,7 +2,7 @@ package compute.entity.container;
 
 import java.util.LinkedHashMap;
 
-public class CreateContainer {
+public class CreateContainer extends Container{
     public String tableName;
     public String primaryKey;
     public String storageName;

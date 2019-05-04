@@ -1,6 +1,6 @@
 package compute.entity.container;
 
-public class StatisticContainer {
+public class StatisticContainer extends Container {
     public int index;
     public String colname;
     public String statisticType;

@@ -1,6 +1,6 @@
 package compute.entity.container;
 
-public class ShowContainer {
+public class ShowContainer extends Container {
     public String content;
     public ShowContainer(){
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class FileOperator{
-    public Object read(String className, String objName){
+    public static Object read(String className, String objName){
         String path = FileInfo.getSerdePath(className) + objName;
         return SerdeUtils.deserialize(path);
     }

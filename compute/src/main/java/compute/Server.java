@@ -39,18 +39,16 @@ public class Server {
         result.command = command;
         return result;
     }
-    protected static void run(Server server) {
+    public static void main(String[] args){
+        Server server = new Server();
         Scanner scanner = new Scanner(System.in);
         String command;
         while(true){
-           System.out.print("wormhole> ");
-           command = scanner.nextLine();
-           Result Result = server.runCommand(command);
-           Result.command =  command;
-           System.out.println(Result.getString());
+            System.out.print("wormhole> ");
+            command = scanner.nextLine();
+            Result Result = server.runCommand(command);
+            Result.command =  command;
+            System.out.println(Result.getString());
         }
-    }
-    public static void main(String[] args){
-        run(new Server());
     }
 }
