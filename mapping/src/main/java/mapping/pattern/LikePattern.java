@@ -19,12 +19,12 @@ public class LikePattern extends Pattern{
 
     @Override
     public boolean isMeet(Object value) {
-        String strPattern = value.toString();
-        strPattern = strPattern.replace("_", "([\\\\s\\\\S])");
-        strPattern = strPattern.replace("%", "([\\\\s\\\\S]*)");
+        String strPattern = this.value;
+        strPattern = strPattern.replace("_", "([\\s\\S])");
+        strPattern = strPattern.replace("%", "([\\s\\S]*)");
         java.util.regex.Pattern regexPattern = java.util.regex.Pattern.compile(strPattern);
-        Matcher matcher = regexPattern.matcher(this.value);
-        if(matcher.find())  return matcher.group(0).length() == this.value.length();
+        Matcher matcher = regexPattern.matcher(value.toString());
+        if(matcher.find())  return matcher.group(0).length() == value.toString().length();
         else    return false;
     }
 }

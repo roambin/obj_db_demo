@@ -26,12 +26,12 @@ public class SelectComputer {
         for(int i = 0; i < result.dataMapArr.size(); i++){
             boolean isPick = true;
             for(ArrayList<Pattern> patterns: condition){
+                isPick = true;
                 for(Pattern pattern: patterns){
                     Object value = result.dataMapArr.get(i).get(pattern.colName);
                     isPick = isPick && pattern.isMeet(value);
                     if(!isPick) break;
                 }
-                isPick = isPick || isPick;
                 if (isPick) break;
             }
             if(!isPick){

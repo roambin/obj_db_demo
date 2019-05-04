@@ -3,10 +3,7 @@ package compute.parser;
 import compute.Setting;
 import compute.entity.TableInfo;
 import compute.entity.container.WhereContainer;
-import mapping.pattern.BetweenPattern;
-import mapping.pattern.ComparePattern;
-import mapping.pattern.IsNullPattern;
-import mapping.pattern.Pattern;
+import mapping.pattern.*;
 import mapping.utils.SerdeUtils;
 import java.util.ArrayList;
 
@@ -67,7 +64,7 @@ public class WhereParser {
                 if(command.length() != 0){
                     String andOr = Parser.readNextWord(command).toLowerCase();
                     command = Parser.cutWord(command).trim();
-                    isNextAnd = command.equals("and");
+                    isNextAnd = andOr.equals("and");
                 }
                 addContainer = innerWhereCommandParser(innerCommand, tableName, strList);
             }else {
@@ -126,6 +123,7 @@ public class WhereParser {
         tableInfo.getTableInfo();
         patternType = patternType.toLowerCase();
         boolean isNot = patternType.startsWith("not") || patternType.startsWith("is not");
+        String valueType = tableInfo.getType(colName);
         switch (patternType){
             case "=":
             case "!=":
@@ -137,7 +135,6 @@ public class WhereParser {
                 if(valueStr.equals("#")){
                     valueStr = "'" + strList.remove(0) + "'";
                 }
-                String valueType = tableInfo.getType(colName);
                 Object value = SerdeUtils.strToObj(valueStr, valueType);
                 return new ComparePattern(colName, value, patternType);
             case "between":
@@ -145,7 +142,6 @@ public class WhereParser {
                 String[] valueStrs = command.split("and");
                 valueStrs[0] = valueStrs[0].trim();
                 valueStrs[1] = valueStrs[1].trim();
-                valueType = tableInfo.getType(colName);
                 Object[] values = new Object[2];
                 for(int i = 0; i < valueStrs.length; i++){
                     values[i] = SerdeUtils.strToObj(valueStrs[i], valueType);
@@ -153,10 +149,23 @@ public class WhereParser {
                 return new BetweenPattern(colName, values[0], values[1], isNot);
             case "in":
             case "not in":
-                throw new UnsupportedOperationException("unsupport type: " + patternType);
+                command = command.replace("(", "");
+                command = command.replace(")", "");
+                String[] inValuesStr = command.split(",");
+                values = new Object[inValuesStr.length];
+                for(int i = 0; i < inValuesStr.length; i++){
+                    inValuesStr[i] = inValuesStr[i].trim();
+                    if(inValuesStr[i].equals("#")){
+                        inValuesStr[i] = "'" + strList.remove(0) + "'";
+                    }
+                    values[i] = SerdeUtils.strToObj(inValuesStr[i], valueType);
+                }
+                return new InPattern(colName, isNot, values);
             case "like":
             case "not like":
-                throw new UnsupportedOperationException("unsupport type: " + patternType);
+                valueStr = "'" + strList.remove(0) + "'";
+                value = SerdeUtils.strToObj(valueStr, valueType);
+                return new LikePattern(colName, value.toString(), isNot);
             case "is null":
             case "is not null":
                 return new IsNullPattern(colName, isNot);

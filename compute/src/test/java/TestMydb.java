@@ -13,7 +13,7 @@ public class TestMydb extends MydbTestBase {
     }
     @Test
     public void where(){
-        String command = "select c1,c2 from test where c1=1 and (c1 not between 2 and 23 or c2 = 'a' and c2 is null or (c1 = 1 or c1 != 2))";
+        String command = "select c1,c2 from test where c2 like '_%' and (c1 not between 2 and 23 or c2 in ('a', 'b') and c2 is null or (c1 = 1 or c1 != 2)) and c1 in (1, 2) or c1=1";
         runCommand(command);
     }
     @Test
