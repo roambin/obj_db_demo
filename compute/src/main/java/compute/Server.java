@@ -43,12 +43,23 @@ public class Server {
         Server server = new Server();
         Scanner scanner = new Scanner(System.in);
         String command;
-        while(true){
-            System.out.print("wormhole> ");
-            command = scanner.nextLine();
-            Result Result = server.runCommand(command);
-            Result.command =  command;
-            System.out.println(Result.getString());
+        label: while(true){
+            try{
+                System.out.print("wormhole> ");
+                command = scanner.nextLine();
+                switch (command){
+                    case "":
+                        break;
+                    case "\\q":
+                        break label;
+                    default:
+                        Result Result = server.runCommand(command);
+                        Result.command = command;
+                        System.out.println(Result.getString());
+                }
+            }catch (Exception e){
+                System.out.println(e.toString());
+            }
         }
     }
 }

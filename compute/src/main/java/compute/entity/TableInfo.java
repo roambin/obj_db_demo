@@ -93,6 +93,7 @@ public class TableInfo {
     }
     public static String[] listTables(){
         File file = new File(Setting.tableInfoPath);
-        return file.list();
+        String[] fileList = file.exists() ? file.list() : new String[0];
+        return fileList;
     }
 }

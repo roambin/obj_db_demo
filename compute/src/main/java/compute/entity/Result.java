@@ -29,10 +29,10 @@ public class Result {
         this.dataMapArr = dataMapArr;
     }
     public String getString() {
-        String resultStr = command;
+        String resultStr = "";//command + "\n";
         if(dataMapArr == null){
-            if(message != null)   resultStr += "\n" + message;
-            resultStr += "\n" + isSuccess;
+            if(message != null)   resultStr += message;
+            resultStr += isSuccess;
             return resultStr;
         }
         resultStr += "\n" + dataMapArrToString();
