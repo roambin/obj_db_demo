@@ -1,5 +1,6 @@
 package compute.parser;
 
+import compute.Setting;
 import compute.entity.LogicalPlan;
 
 import java.lang.reflect.Array;
@@ -38,10 +39,11 @@ public class CreateParser {
         }
         command = command.substring(command.lastIndexOf(')') + 1).trim();
         if(!Parser.readNextWord(command).toLowerCase().equals("store")){
-            Parser.throwException(Parser.exceptionMessage);
+            logicalPlan.createContainer.storageName = Setting.DEFAULT_STORAGE;
+        }else{
+            command = Parser.cutWord(command);
+            String storageName = Parser.readNextWord(command);
+            logicalPlan.createContainer.storageName = storageName;
         }
-        command = Parser.cutWord(command);
-        String storageName = Parser.readNextWord(command);
-        logicalPlan.createContainer.storageName = storageName;
     }
 }

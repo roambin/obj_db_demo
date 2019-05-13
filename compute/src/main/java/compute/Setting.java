@@ -7,4 +7,5 @@ public class Setting {
     public static String DATABASE = "wormhole";
     public static String TABLEINFO_NOTFOUND_ERROR = "table info not found";
     public static String SQL_GROUPBY_ERROR = "selected columns must be 'group by'";
+    public static String DEFAULT_STORAGE = "myfile";
 }

@@ -51,6 +51,9 @@ public class Server {
                     case "":
                         break;
                     case "\\q":
+                    case "q":
+                    case "exit":
+                    case "quit":
                         break label;
                     default:
                         Result Result = server.runCommand(command);
