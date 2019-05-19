@@ -32,25 +32,12 @@ public class SerdeUtils {
         return true;
     }
     public static Object deserialize(File file){
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new MyfileObjectInputStream(fis);
-            Object obj = ois.readObject();
-            ois.close();
-            fis.close();
-            return obj;
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
-        }
+        return deserialize(file.getPath());
     }
     public static Object deserialize(String path){
         try {
             FileInputStream fis = new FileInputStream(path);
-            ObjectInputStream ois = new ObjectInputStream(fis);
+            ObjectInputStream ois = new MyfileObjectInputStream(fis);
             Object obj = ois.readObject();
             ois.close();
             return obj;
