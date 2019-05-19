@@ -42,7 +42,16 @@ public class SelectComputer {
     public static void doGroupby(LogicalPlan logicalPlan, PysicalResult pysicalResult, Result result){
         if(pysicalResult.isDimensionPushDown) return;
         if(logicalPlan.selectContainer.groupByContainer == null){
-            doStatistic(logicalPlan, result.dataMapArr);
+            boolean isDimension = false;
+            for(String colName: logicalPlan.selectContainer.colNames){
+                if(StatisticUtils.isStatistic(colName)){
+                    isDimension = true;
+                    break;
+                }
+            }
+            if(isDimension){
+                doStatistic(logicalPlan, result.dataMapArr);
+            }
             return;
         }else{
             //generate group

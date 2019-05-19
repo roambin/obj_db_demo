@@ -25,7 +25,7 @@ public class DeleteOperator {
             isSuccess = opObject.delete(pysicalPlan.location);
         } else{
             LogicalPlan rewriteLogicalPlan = rewriteLogicalPlan(logicalPlan);
-            isSuccess = UpdateOperator.rewriteRun(rewriteLogicalPlan, pysicalPlan, opObject);
+            isSuccess = rewriteRun(rewriteLogicalPlan, pysicalPlan, opObject);
         }
         result = new Result(isSuccess);
         return result;
@@ -43,5 +43,18 @@ public class DeleteOperator {
         rewriteLogicalPlan.selectContainer.colNames = new String[]{VirtualColumn.colIndex};
         rewriteLogicalPlan.selectContainer.whereContainer.condition = logicalPlan.deleteContainer.whereContainer.condition;
         return rewriteLogicalPlan;
+    }
+    public static boolean rewriteRun(LogicalPlan rewriteLogicalPlan, PysicalPlan pysicalPlan, OpObject opObject){
+        boolean isSuccess = true;
+        Result rewriteResult = SelectOperator.operate(rewriteLogicalPlan);
+        String[] colIndexs = new String[rewriteResult.dataMapArr.size()];
+        for(int i = 0; i < colIndexs.length; i++){
+            colIndexs[i] = rewriteResult.dataMapArr.get(i).get(VirtualColumn.colIndex).toString();
+        }
+        for(int i = 0; i < colIndexs.length; i++){
+            pysicalPlan.location.key = colIndexs[i];
+            isSuccess = isSuccess && opObject.delete(pysicalPlan.location);
+        }
+        return isSuccess;
     }
 }

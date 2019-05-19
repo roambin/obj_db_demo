@@ -1,5 +1,7 @@
 package myfile.utils;
 
+import myfile.utils.entity.MyfileObjectInputStream;
+
 import java.io.*;
 
 public class SerdeUtils {
@@ -32,7 +34,7 @@ public class SerdeUtils {
     public static Object deserialize(File file){
         try {
             FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
+            ObjectInputStream ois = new MyfileObjectInputStream(fis);
             Object obj = ois.readObject();
             ois.close();
             fis.close();
